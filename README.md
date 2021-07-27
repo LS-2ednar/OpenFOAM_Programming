@@ -1,4 +1,4 @@
-# Note this REPO is in the making and will take some time until it is finished.
+r# Note this REPO is in the making and will take some time until it is finished.
 ### General Information
 ***  
 This repo is used to show the process to develop functions for OpenFOAM and how these functions need to be structured to archive working applications to enchance your CFD simulations. First very briefly the appliaction directory structure and important files which have to be defined are explained. Then it is explained how the applcations are compiled and how certain dependencies can be removed again. Finally an example is shown, that explains the developement of a new application for OpenFOAM in different complexity levels increasing with the example number. 
