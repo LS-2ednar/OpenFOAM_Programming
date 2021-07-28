@@ -1,6 +1,14 @@
-/*----------------------------------------------------*\
- * Copy from other file 00_monod_simple
-\*----------------------------------------------------*/
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  dev                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+// Accessing given and custom files to calculate cell densities and writing the
+// output to a csv file.
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
 #include "fvCFD.H"
 #include <math.h>
 
@@ -44,40 +52,6 @@ int main(int argc, char *argv[])
     float MueMax;
     CellDict.lookup("MueMax") >> MueMax;
 
-    // ----------------------------------------------------------------------
-    // Accessing controlDict for the variables startTime, endTime and deltaT
-    // ----------------------------------------------------------------------
-    
-    // Accesssing controlDict
-    dictionary ContDict;
-    const word ContDictName("controlDict");
-    
-    // Input-Output object which holds the path to the dict and its name 
-    IOobject ContDictIO
-    (
-    ContDictName,		// name of the file
-    mesh.time().system(), 	// path to wehere the file is located
-    mesh,			// reference to mesh needed by the constructor
-    IOobject::MUST_READ		// reading is required
-    );
-
-    // Check for the availability of the dictionary and if it follows the OF format
-    if (!ContDictIO.typeHeaderOk<dictionary>(true))
-        FatalErrorIn(args.executable()) << "specified dictionary cannot be opend " << ContDictName << exit(FatalError);
-
-    // Dictionary object initialisation
-    ContDict = IOdictionary(ContDictIO);
-
-    // Read information form main part of dictionary using standard C++ stringstream syntax
-    float startTime;
-    ContDict.lookup("startTime") >> startTime;
-    
-    float endTime;
-    ContDict.lookup("endTime") >> endTime;
-
-    float deltaT;
-    ContDict.lookup("deltaT") >> deltaT;
-
     // used variables for CellDensity Calculation
     double exp(double x);	// initializing the exponential function
 
@@ -95,16 +69,15 @@ int main(int argc, char *argv[])
     // Openfile in new created directory
     outputFilePtr.reset(new OFstream(outputDir/"CellGrowth.csv"));
 
-    //Write header to file
+    // Write header to file
     outputFilePtr() << "Time,Cells" << endl;
     
     // Calculation of Cell values and adding time and CellDensity to outputfile
-    for (float i = startTime; i < endTime+deltaT ; i = i+deltaT)
+    while(runTime.loop())
     {
-        //Console Outputs
-        Info << "Time  = " << i << nl << "Cells = " << round(CellDensity*exp(MueMax*i)) << nl << endl;
-        // Appending Values to the new file
-        outputFilePtr() << i << "," << round(CellDensity*exp(MueMax*i)) << endl;
+        //Console Output
+        Info <<"Time = " << runTime.timeName() << nl << "Cells = " << round(CellDensity*exp(MueMax*runTime.value())) << endl;
+        // Appending Values to csv file
+        outputFilePtr() << runTime.timeName() << "," <<  round(CellDensity*exp(MueMax*runTime.value())) << endl;
     }
-    return 0;
 }
