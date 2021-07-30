@@ -20,4 +20,5 @@ The first example (**00_monod_simple**) is used to show how the basic monod calc
 ### Second example
 The second example (**01_monod_save_data**) shows how data is accessed from dictionary files and how to work with runTime. Furtherit is show how data can be stored in other files by creating a "postProcessing" directory where the calculated cell values per time step are stored in a file called "CellGrowth.csv" 
 
-
+### Third example --> not working jet
+Here an simple bioreactor geometry is provided and the idea is to link the previously function with the simpleFoam solver to get an idea about the fluid dynamics in the reactor as well as the current amount of cells at timestep t.
