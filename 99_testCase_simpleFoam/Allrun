@@ -1,0 +1,7 @@
+#!/bin/sh
+
+blockMesh 2>&1 | tee blockMesh.log
+surfaceFeatures 2>&1 | tee surfaceFeatures.log
+snappyHexMesh -overwrite 2>&1 | tee snappyHexMesh.log
+simpleFoam 2>&1 | tee simpleFoam.log
+
