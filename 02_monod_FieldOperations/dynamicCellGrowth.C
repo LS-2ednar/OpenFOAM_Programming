@@ -46,15 +46,27 @@ int main(int argc, char *argv[])
     CellDict = IOdictionary(CellDictIO);
 
     // Read information form main part of dictionary using standard C++ stringstream syntax
-    int CellDensity;
+    float CellDensity;
     CellDict.lookup("CellDensity") >> CellDensity;
     
     float MueMax;
     CellDict.lookup("MueMax") >> MueMax;
+    
+    float Substrate;
+    CellDict.lookup("Substrate") >> Substrate;
+    
+    float Ks;
+    CellDict.lookup("Ks") >> Ks;
 
+    float Yxs;
+    CellDict.lookup("Yxs") >> Yxs;
+    
     // used variables for CellDensity Calculation
     double exp(double x);	// initializing the exponential function
-
+    
+    float mue;
+    mue = MueMax*(Substrate/(Substrate+Ks));
+ 
     // -------------------------------------------------------
     // GENERATING AN OUTPUTFILE AND FOLDER TO WORK WITH LATER
     // -------------------------------------------------------
@@ -70,14 +82,32 @@ int main(int argc, char *argv[])
     outputFilePtr.reset(new OFstream(outputDir/"CellGrowth.csv"));
 
     // Write header to file
-    outputFilePtr() << "Time,Cells" << endl;
+    outputFilePtr() << "Time,Cells,Substrate" << endl;
     
     // Calculation of Cell values and adding time and CellDensity to outputfile
     while(runTime.loop())
     {
-        //Console Output
-        Info <<"Time = " << runTime.timeName() << nl << "Cells = " << round(CellDensity*exp(MueMax*runTime.value())) << endl;
+        float mue;
+        mue = MueMax*((Substrate-(CellDensity*exp(mue*runTime.value())*Yxs))/(Ks+(Substrate-(CellDensity*exp(mue*runTime.value())*Yxs))));
+
+        float CellDensitiy;
+        if (Substrate > 0) {
+		CellDensity = CellDensity*exp(mue*(runTime.value())); 
+	} else {
+                CellDensity = CellDensity;
+	}
+        float Substrate;
+	if (Substrate > 0 ) {
+                Substrate = Substrate-(CellDensity*exp(mue*runTime.value())*Yxs);
+        } else {
+                Substrate = 0;
+        }
+       
+	//Console Output
+        Info <<"Time = " << runTime.timeName() << nl << "Cells = " << CellDensity <<" g/L" << nl <<"Substrate = " << Substrate << nl << endl;
+
         // Appending Values to csv file
-        outputFilePtr() << runTime.timeName() << "," <<  round(CellDensity*exp(MueMax*runTime.value())) << endl;
+        outputFilePtr() << runTime.timeName() << "," <<  CellDensity << "," << Substrate
+<< endl;
     }
 }

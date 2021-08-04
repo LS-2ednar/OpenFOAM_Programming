@@ -6,4 +6,4 @@ rm -r constant/polyMesh
 rm -r constant/triSurface/*.eMesh
 rm -r constant/extendedFeatureEdgeMesh
 rm -r *.log
-
+rm -r postProcessing
