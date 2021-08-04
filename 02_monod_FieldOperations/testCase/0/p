@@ -1,9 +1,9 @@
 /*--------------------------------*- C++ -*----------------------------------*\
-| =========                 |                                                 |
-| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  3.0.1                                 |
-|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
-|    \\/     M anipulation  |                                                 |
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
@@ -20,20 +20,31 @@ internalField   uniform 0;
 
 boundaryField
 {
-    movingWall
+    bottom 
     {
-        type            zeroGradient;
+        type           zeroGradient; 
     }
 
-    fixedWalls
+    stirrer
     {
-        type            zeroGradient;
+        type           zeroGradient; 
+    }
+    
+    stirrerolder
+    {
+        type           zeroGradient;
+    }
+    wall1
+    {
+        type           zeroGradient;
     }
 
-    frontAndBack
+    top
     {
-        type            empty;
+        type            symmetry;
     }
+
+
 }
 
 // ************************************************************************* //
