@@ -64,15 +64,15 @@ int main(int argc, char *argv[])
     // used variables for CellDensity Calculation
     double exp(double x);	// initializing the exponential function
     
-    float mue;
-    mue = MueMax*(Substrate/(Substrate+Ks));
+    float MueT;
+    MueT = MueMax*(Substrate/(Substrate+Ks));
  
     // -------------------------------------------------------
     // GENERATING AN OUTPUTFILE AND FOLDER TO WORK WITH LATER
     // -------------------------------------------------------
     
     // Creating custom directory and wirte output file
-    fileName outputDir = mesh.time().path()/"postProcessing";
+    fileName outputDir = runTime.time().path()/"postProcessing";
     mkDir(outputDir);
 
     // Outputfile Pointer
@@ -83,27 +83,24 @@ int main(int argc, char *argv[])
 
     // Write header to file
     outputFilePtr() << "Time,Cells,Substrate" << endl;
+       
+    // make sure last number of cells is saved for later pass
+    float last_cells = 0; 
     
     // Calculation of Cell values and adding time and CellDensity to outputfile
     while(runTime.loop())
     {
-        float mue;
-        mue = MueMax*((Substrate-(CellDensity*exp(mue*runTime.value())*Yxs))/(Ks+(Substrate-(CellDensity*exp(mue*runTime.value())*Yxs))));
-
-        float CellDensitiy;
-        if (Substrate > 0) {
-		CellDensity = CellDensity*exp(mue*(runTime.value())); 
-	} else {
-                CellDensity = CellDensity;
-	}
-        float Substrate;
-	if (Substrate > 0 ) {
-                Substrate = Substrate-(CellDensity*exp(mue*runTime.value())*Yxs);
-        } else {
-                Substrate = 0;
-        }
+        //updating information about specific growthrate, celldensity and substrate amount
+        last_cells = CellDensity;
+        MueT = MueMax*(Substrate/(Substrate+Ks));
+        CellDensity = CellDensity*exp(MueT*runTime.value());
+        Substrate = Substrate-(CellDensity*exp(MueT*runTime.value())*Yxs);
        
-	//Console Output
+        if (Substrate < 0) {
+        CellDensity = last_cells;
+        Substrate = 0;
+        };	
+        //Console Output
         Info <<"Time = " << runTime.timeName() << nl << "Cells = " << CellDensity <<" g/L" << nl <<"Substrate = " << Substrate << nl << endl;
 
         // Appending Values to csv file

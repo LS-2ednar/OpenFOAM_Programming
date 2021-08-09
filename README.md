@@ -21,7 +21,7 @@ The first example (**00_monod_simple**) is used to show how the basic monod calc
 The second example (**01_monod_save_data**) shows how data is accessed from dictionary files and how to work with runTime. Further, it is show how data can be stored in other files by creating a "postProcessing" directory where the calculated cell values per time step are stored in a file called "CellGrowth.csv" 
 
 ### Third example --> not working jet
-The Cell Growth is determined after an initial calculation of of the flowfield (using simpleFoam) followed by the custom function also the concept of a substrate is introduced. 
+The Cell Growth is determined prior to an the calculation of of the flowfield (using simpleFoam) followed by the custom function also the concept of a substrate is introduced and an changing value for the specific growthrate is implemented. 
 
 
 

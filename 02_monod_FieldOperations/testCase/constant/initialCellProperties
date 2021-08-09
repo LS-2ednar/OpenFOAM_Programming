@@ -17,8 +17,8 @@ FoamFile
 
 CellDensity 			0.5;  		// g per L
 MueMax 				0.0011805556; 	// per s -->  1.02 per hour 
-Substrate 			5; 		// g per L
+Substrate 			50; 		// g per L
 Ks                              0.001;           // g per L 
-Yxs	                        0.98;           // g per g          
+Yxs	                        1.46;           // g per g          
 
 // ************************************************************************* //

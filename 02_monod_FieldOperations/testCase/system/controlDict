@@ -23,13 +23,13 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         7200;       // [s] --> 5h Simlation
+endTime         500;// 7200;       // [s] --> 5h Simlation
 
 deltaT          0.05;
 
 writeControl    timeStep;
 
-writeInterval   10000; 
+writeInterval   2000; 
 
 purgeWrite      0;
 
@@ -45,20 +45,9 @@ timePrecision   6;
 
 runTimeModifiable true;
 
-//functions
-//{
-//    forces
-//    {
-//        type                 forces;
-//        libs                 ("libforces.so");
-//        writeControl         timeStep;
-//        writeInterval        100;
-//        patches              (stirrer);
-//        rho                  rhoInf;
-//        log                  true;
-//        rhoInf               933.33;
-//        CofR                 (0 0 0.02);
-//    }
-//}
+//libs
+//(
+//"NameOfUsedCostumLibToInclude.so"
+//);
 
 //********************************************************* //
