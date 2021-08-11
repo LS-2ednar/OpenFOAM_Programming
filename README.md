@@ -17,7 +17,7 @@ The preseneted codes try to show some different level of monod kinetics. The exa
 The next set of examples (02 & 03) have an specific growthrate based on the amount of availabe substrate. Which leads to the equations:
 <p align="center"> <a href="https://www.codecogs.com/eqnedit.php?latex=N_t&space;=&space;N_0\cdot&space;e^{\mu_{t}\cdot&space;t}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_t&space;=&space;N_0\cdot&space;e^{\mu_{t}\cdot&space;t}" title="N_t = N_0\cdot e^{\mu_{t}\cdot t}" /></a> </p> Where (<a href="https://www.codecogs.com/eqnedit.php?latex=\mu_{t}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\mu_{t}" title="\mu_{t}" /></a>) is determined via the substrate and the substrate affinity coefficient as shown below:
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=\mu_t&space;=&space;\mu_{max}&space;\cdot&space;\frac{S}{K_s&space;&plus;&space;S}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\mu_t&space;=&space;\mu_{max}&space;\cdot&space;\frac{S}{K_s&space;&plus;&space;S}" title="\mu_t = \mu_{max} \cdot \frac{S}{K_s + S}" /></a>
+<p align="center"> <a href="https://www.codecogs.com/eqnedit.php?latex=\mu_t&space;=&space;\mu_{max}&space;\cdot&space;\frac{S}{K_s&space;&plus;&space;S}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\mu_t&space;=&space;\mu_{max}&space;\cdot&space;\frac{S}{K_s&space;&plus;&space;S}" title="\mu_t = \mu_{max} \cdot \frac{S}{K_s + S}" /></a> </p>
 
 
 ### First example 
@@ -30,5 +30,5 @@ The second example (**01_monod_save_data**) shows how data is accessed from dict
 The Cell Growth is determined prior to an the calculation of of the flowfield (using simpleFoam) followed by the custom function also the concept of a substrate is introduced and an changing value for the specific growthrate is implemented. 
 
 ### Forth example --> not jet working
-Here an solver is presented which works like the simpleFoam called CellSimpleFoam. It does the previous mentioned functionalities in runtime. This application needs another file called createFields.H.
+Here an solver is presented which works like the simpleFoam called CellSimpleFoam. It does the previous mentioned functionalities in runtime. To get an idea of how a solver should be created the files from https://develop.openfoam.com/Development/openfoam/-/tree/master/applications/solvers/incompressible/simpleFoam where used and the equations for the caluclations of the biomass and the substrate over time where added to the mix.
 
