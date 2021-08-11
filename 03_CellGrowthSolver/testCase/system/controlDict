@@ -23,7 +23,7 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         500;       // [s] --> 5h Simlation
+endTime         1500;       // [s] --> 5h Simlation
 
 deltaT          0.05;
 
