@@ -16,7 +16,7 @@ The preseneted codes try to show some different level of monod kinetics. The exa
 
 The next set of examples (02 & 03) have an specific growthrate based on the amount of availabe substrate. Which leads to the equations:
 <p align="center"> <a href="https://www.codecogs.com/eqnedit.php?latex=N_t&space;=&space;N_0\cdot&space;e^{\mu_{t}\cdot&space;t}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_t&space;=&space;N_0\cdot&space;e^{\mu_{t}\cdot&space;t}" title="N_t = N_0\cdot e^{\mu_{t}\cdot t}" /></a> </p> Where (<a href="https://www.codecogs.com/eqnedit.php?latex=\mu_{max}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\mu_{max}" title="\mu_{max}" /></a>) is determined via the substrate and the substrate affinity coefficient as shown below:
-<a href="https://latex.codecogs.com/png.latex?%5Cmu_t%20%3D%20%5Cmu_%7Bmax%7D%20%5Ccdot%20%5Cfrac%7BS%7D%7BK_s%20&plus;%20S%7D">
+<p align="center"> <a href="https://latex.codecogs.com/png.latex?%5Cmu_t%20%3D%20%5Cmu_%7Bmax%7D%20%5Ccdot%20%5Cfrac%7BS%7D%7BK_s%20&plus;%20S%7D"></a> </p>
 
 
 
