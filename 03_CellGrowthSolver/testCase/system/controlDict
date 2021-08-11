@@ -23,13 +23,13 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         7200;       // [s] --> 5h Simlation
+endTime         500;       // [s] --> 5h Simlation
 
 deltaT          0.05;
 
 writeControl    timeStep;
 
-writeInterval   10000; 
+writeInterval   1000; 
 
 purgeWrite      0;
 

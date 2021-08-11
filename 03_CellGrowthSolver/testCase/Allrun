@@ -4,5 +4,4 @@ blockMesh 2>&1 | tee blockMesh.log
 surfaceFeatures 2>&1 | tee surfaceFeatures.log
 snappyHexMesh -overwrite 2>&1 | tee snappyHexMesh.log
 checkMesh 2>&1 | tee checkMesh.log
-simpleFoam 2>&1 | tee simpleFoam.log
-CellGrowth 2>&1 | tee CellGrowth.log
+CG_Solver 2>&1 | tee CG_Solver.log

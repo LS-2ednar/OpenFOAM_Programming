@@ -2,50 +2,28 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Version:  7
+    \\  /    A nd           | Version:  8
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    location    "system";
-    object      fvSchemes;
+    class       faceSet;
+    location    "constant/polyMesh/sets";
+    object      wrongFaces;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-ddtSchemes
-{
-    default         Euler;
-}
 
-gradSchemes
-{
-    default         Gauss linear;
-    grad(p)         Gauss linear;
-}
-
-divSchemes
-{
-    default         Gauss linear;
-    div(phi,U)      Gauss linear;
-}
-
-laplacianSchemes
-{
-    default         Gauss linear orthogonal;
-}
-
-interpolationSchemes
-{
-    default         linear;
-}
-
-snGradSchemes
-{
-    default         orthogonal;
-}
-
+6
+(
+25764 
+46337 
+19108 
+44877 
+25431 
+21350 
+)
 
 // ************************************************************************* //

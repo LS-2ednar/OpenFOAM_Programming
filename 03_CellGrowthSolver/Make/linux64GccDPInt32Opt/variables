@@ -1,1 +1,1 @@
-EXE = $(FOAM_USER_APPBIN)/CellGrowth
+EXE = $(FOAM_USER_APPBIN)/CG_Solver

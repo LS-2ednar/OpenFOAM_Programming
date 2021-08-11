@@ -100,11 +100,11 @@ int main(int argc, char *argv[])
         CellDensity = last_cells;
         Substrate = 0;
         };	
+
         //Console Output
         Info <<"Time = " << runTime.timeName() << nl << "Cells = " << CellDensity <<" g/L" << nl <<"Substrate = " << Substrate << nl << endl;
 
         // Appending Values to csv file
-        outputFilePtr() << runTime.timeName() << "," <<  CellDensity << "," << Substrate
-<< endl;
+        outputFilePtr() << runTime.timeName() << "," <<  CellDensity << "," << Substrate << endl;
     }
 }

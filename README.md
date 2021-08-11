@@ -14,6 +14,12 @@ To generate new applications and functions in OpenFOAM the structure of the sepc
 The preseneted codes try to show some different level of monod kinetics. The examples (00 to **XY**) work with the imaginary concept of constant growth, no limitations and no negative effects of anymetabolites. Therefore one can say that the amount of Cells (<a href="https://www.codecogs.com/eqnedit.php?latex=N_t" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_t" title="N_t" /></a>) after a time *t* is only dependent on the maximal growth rate initial number of Cells (<a href="https://www.codecogs.com/eqnedit.php?latex=N_0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_0" title="N_0" /></a>), the maximal specific growth rate (<a href="https://www.codecogs.com/eqnedit.php?latex=\mu_{max}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\mu_{max}" title="\mu_{max}" /></a>) and, time (*t*). Which can be described as follows:
 <p align="center"> <a href="https://www.codecogs.com/eqnedit.php?latex=N_t&space;=&space;N_0\cdot&space;e^{\mu_{max}\cdot&space;t}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_t&space;=&space;N_0\cdot&space;e^{\mu_{max}\cdot&space;t}" title="N_t = N_0\cdot e^{\mu_{max}\cdot t}" /></a> </p>
 
+The next set of examples (02 & 03) have an specific growthrate based on the amount of availabe substrate. Which leads to the equations:
+<p align="center"> <a href="https://www.codecogs.com/eqnedit.php?latex=N_t&space;=&space;N_0\cdot&space;e^{\mu_{t}\cdot&space;t}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_t&space;=&space;N_0\cdot&space;e^{\mu_{t}\cdot&space;t}" title="N_t = N_0\cdot e^{\mu_{t}\cdot t}" /></a> </p> Where (<a href="https://www.codecogs.com/eqnedit.php?latex=\mu_{max}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\mu_{max}" title="\mu_{max}" /></a>) is determined via the substrate and the substrate affinity coefficient as shown below:
+<a href="https://latex.codecogs.com/png.latex?%5Cmu_t%20%3D%20%5Cmu_%7Bmax%7D%20%5Ccdot%20%5Cfrac%7BS%7D%7BK_s%20&plus;%20S%7D">
+
+
+
 ### First example 
 The first example (**00_monod_simple**) is used to show how the basic monod calculation with a fixed value for muemax and an inital cell density can be applied and how the amount of cells would be calculated using C syntax.
 
@@ -24,5 +30,5 @@ The second example (**01_monod_save_data**) shows how data is accessed from dict
 The Cell Growth is determined prior to an the calculation of of the flowfield (using simpleFoam) followed by the custom function also the concept of a substrate is introduced and an changing value for the specific growthrate is implemented. 
 
 ### Forth example --> not jet working
-Here an solver is presented which works like the simpleFoam called CellSimpleFoam. It does the previous mentioned functionalities in runtime.
+Here an solver is presented which works like the simpleFoam called CellSimpleFoam. It does the previous mentioned functionalities in runtime. This application needs another file called createFields.H.
 

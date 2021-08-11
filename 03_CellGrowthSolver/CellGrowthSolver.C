@@ -20,6 +20,10 @@ int main(int argc, char *argv[])
     // Create the time system and the instance called mesh
     #include "createTime.H"
     #include "createMesh.H"
+    
+    // including createFileds.H since we work with fields for this case
+    
+    #include "createFields.H"
 
     //----------------------------------------------------------------
     // LOOK UP THINGS FROM A FILE DICTIONARY AND USING THE STORED DATA 
@@ -66,7 +70,27 @@ int main(int argc, char *argv[])
     
     float mue;
     mue = MueMax*(Substrate/(Substrate+Ks));
- 
+
+    /*Output of the previous values read from the costum dictionary*/
+    
+    Info << nl <<"Reading Celldata info" << endl;
+    Info << nl << "CellDensity:" << CellDensity << nl << "MueMax" << MueMax << endl;
+    Info << "Calculated Mue0:" << mue << nl << "Substrate:" << Substrate << endl; 
+    Info << "Ks:"<< Ks << nl << "Yxs" << Yxs << endl;
+
+    /*This part is new since here the realation factors from the fvSolution files are read*/
+    scalar alpha;
+    fvSolution.lookup("alpha") >> alpha;
+    scalar pRefCell;
+    fvSolution.lookup("pRefCell") >> pRefCell;
+    scalar pRefValue;
+    fvSolution.lookup("pRefValue") >> pRefValue;
+    
+    /*Output of the previous values read from the fvSolutin*/
+    Info << nl << "Reading field corrections" << endl; 
+    Info << nl << "alpha:" << alpha << nl << "pRefCell" << pRefCell << endl;
+    Info << "pRefValue" << pRefValue  << endl; 
+     
     // -------------------------------------------------------
     // GENERATING AN OUTPUTFILE AND FOLDER TO WORK WITH LATER
     // -------------------------------------------------------
@@ -87,15 +111,66 @@ int main(int argc, char *argv[])
     // Calculation of Cell values and adding time and CellDensity to outputfile
     while(runTime.loop())
     {
+        Info << "Runtime: " << runTime.timeName() << endl;
+        
+        //definiton of momentum equation
+        fvVectorMatrix UEqn
+        (
+            fvm::div(phi,U) - fvm::laplacian(nu,U) == -fvc::grad(p)
+        );
+        
+        //Solving the defined momentum equation UEqn
+        UEqn.solve();
+
+        //Geting A and H matricies as fields
+        volScalarField A = UEqn.A();
+        volVectorField H = UEqn.H();
+        
+        //
+        volScalarField A_inv = 1.0/A;
+        
+        surfaceScalarField A_inv_flux = fvc::interpolate(A_inv); 
+        
+        volVectorField HbyA = A_inv * H;
+        
+
+        fvScalarMatrix pEqn
+        (
+            fvm::laplacian(A_inv_flux,p) == fvc::div(HbyA)
+        );
+
+        // Reference Preasure to Equation
+        pEqn.setReference(pRefCell,pRefValue);
+        
+        pEqn.solve();
+        p = alpha*p+(1.0-alpha)*p_old;
+
+        U = A_inv*H - A_inv*fvc::grad(p);
+
+        phi = fvc::interpolate(U) & mesh.Sf();
+        
+        U.correctBoundaryConditions();
+        p.correctBoundaryConditions();
+        
+        p_old = p;
+
+        // BiologicalCell Calucations
         CellDensity = CellDensity*exp(MueMax*runTime.value()); 
         
         Substrate = Substrate-(CellDensity*exp(mue*runTime.value())*Yxs);
        
 	//Console Output
-        Info <<"Time = " << runTime.timeName() << nl << "Cells = " << CellDensity <<" g/L" << nl <<"Substrate = " << Substrate << nl << endl;
+        Info << nl <<"Time = " << runTime.timeName() << nl << "Cells = " << CellDensity <<" g/L" << nl <<"Substrate = " << Substrate << nl << endl;
 
         // Appending Values to csv file
         outputFilePtr() << runTime.timeName() << "," <<  CellDensity << "," << Substrate
 << endl;
+
     }
+    runTime.write();
+    Info << nl << "Finished in:" << nl << runTime.elapsedCpuTime() << " s" << endl;
 }
+
+
+/*Things to modify*/
+/*Line 125 to end need update so its solves something worth testing :-)*/
