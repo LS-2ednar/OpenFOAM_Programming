@@ -30,5 +30,4 @@ The second example (**01_monod_save_data**) shows how data is accessed from dict
 The Cell Growth is determined prior to an the calculation of of the flowfield (using simpleFoam) followed by the custom function also the concept of a substrate is introduced and an changing value for the specific growthrate is implemented. 
 
 ### Forth example --> not jet working
-Here an solver is presented which works like the simpleFoam called CellSimpleFoam. It does the previous mentioned functionalities in runtime. To get an idea of how a solver should be created the files from https://develop.openfoam.com/Development/openfoam/-/tree/master/applications/solvers/incompressible/simpleFoam where used and the equations for the caluclations of the biomass and the substrate over time where added to the mix.
-
+Here the simple algorithm is modified to work with specific values which are added to the fvSolutions dictionary and calculates the value of cells and substrate after every iteration.

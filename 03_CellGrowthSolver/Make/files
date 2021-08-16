@@ -1,3 +1,0 @@
-CellGrowthSolver.C
-
-EXE = $(FOAM_USER_APPBIN)/CG_Solver
