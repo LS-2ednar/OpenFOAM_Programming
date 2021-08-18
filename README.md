@@ -31,8 +31,5 @@ The second example (**01_monod_save_data**) shows how data is accessed from dict
 ### Third example
 The Cell Growth is determined prior to an the calculation of of the flowfield (using simpleFoam) followed by the custom function also the concept of a substrate is introduced and an changing value for the specific growthrate is implemented. 
 
-### Forth example --> not jet working
-Here the pimple algorithm is modified to work with specific values which are added to an "cellProperties" dictionary and calculate the value of cells and substrate after every iteration. 
-
-TODO:
----> Get in the testcase folder the files for N and S seem to make problems run pimpleGrow 2>&1 | tee pimpleGrow.log 
+### Forth example
+Here the pimple algorithm is modified to work with specific values which are added to an "cellProperties" dictionary and calculate the value of cells and substrate after every iteration. To do this initially the pimpleFoam solver application is copyied the .C file is renamed and adjusted in the Make/files file. Then an additional TestEqn.H is introduced where the calculation of cells and substrate is done.
