@@ -1,0 +1,6 @@
+/* dynamicCode:
+ * SHA1 = 836c01257f56160729021142ea45930e4c6506e1
+ */
+Function1Template.C
+
+LIB = $(PWD)/../platforms/$(WM_OPTIONS)/lib/libpulse_836c01257f56160729021142ea45930e4c6506e1
