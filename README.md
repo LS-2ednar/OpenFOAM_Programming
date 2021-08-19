@@ -39,3 +39,6 @@ Here the pimple algorithm is modified to work with specific values which are add
 ## Sources
 This Repo is based on the ideas shown here [UnnamedMoose BasicOpenFOAMProgrammingTutorials](https://github.com/UnnamedMoose/BasicOpenFOAMProgrammingTutorials)
 
+---
+### TO DO
+Look into [OpenFOAM 3 Weeks series](https://wiki.openfoam.com/index.php?title=%223_weeks%22_series#) especially days 12 to 14!!!
