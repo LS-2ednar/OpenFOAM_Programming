@@ -9,7 +9,7 @@ This repo is used to show the process to develop functions for OpenFOAM and how 
 ***
 To generate new applications and functions in OpenFOAM the structure of the sepcific files has to be stored as shown in the image below: <br> <p align="center"><img src="https://cdn.cfd.direct/docs/user-guide-v7/img/user253x.png" alt = "From OpenFOAM Programmer's Guide" > </p> <br> As indicated there are several files which are important for the final working application. New application show a *Placeholder*.C source file, which it the file that is to be compiled. This file has the code which later is run after compilation. The *Placeholder*.H files are used to check for errors, since these files represent headers of classes which later are used in the code. The subdirectory Make has two files the *files* file and the *options* file. The *files* file is a list of the files which are generated in the end aswell as the name of the source file and the the name of the later executable command. The *options* file contains the full directory paths to locate header files. To compile an application one can run the *wmake* command to compile everything. This step is especially usefull ince hit might show potential errors which are found during compilation. In case that the application should be removed, one can run the *wclean* command.
 
-In general the approach to create a new application for OpenFOAM should be that an allready exisiting application is modified by introducing new .H files and including the in existing solver code (.C files). 
+In general the approach to create a new application for OpenFOAM should be that an allready exisiting application is modified by introducing new .H files and including them in existing solver code (.C files). 
 
 ### Code Examples
 ***
@@ -31,5 +31,5 @@ The second example (**01_monod_save_data**) shows how data is accessed from dict
 ### Third example
 The Cell Growth is determined prior to an the calculation of of the flowfield (using simpleFoam) followed by the custom function also the concept of a substrate is introduced and an changing value for the specific growthrate is implemented. 
 
-### Forth example
-Here the pimple algorithm is modified to work with specific values which are added to an "cellProperties" dictionary and calculate the value of cells and substrate after every iteration. To do this initially the pimpleFoam solver application is copyied the .C file is renamed and adjusted in the Make/files file. Then an additional TestEqn.H is introduced where the calculation of cells and substrate is done.
+### Forth example (still some issues which need to be faced)
+Here the pimple algorithm is modified to work with specific values which are added to an "cellProperties" dictionary and calculate the value of cells and substrate after every iteration. To archive this the pimpleFoam solver application is copyied then the .C file is renamed and adjusted in the Make/files file. Then an additional TestEqn.H is introduced where the calculation of cells and substrate is done. Note that at this stage the calculated values are not reflecting the acctual values. This is due to the way the function is updated every timestep. Further, the outputfile no just shows the last calculated value which needs some more modifications.
