@@ -34,6 +34,10 @@ The Cell Growth is determined prior to an the calculation of of the flowfield (u
 ### Forth example (still some issues which need to be faced)
 Here the pimple algorithm is modified to work with specific values which are added to an "cellProperties" dictionary and calculate the value of cells and substrate after every iteration. To archive this the pimpleFoam solver application is copyied then the .C file is renamed and adjusted in the Make/files file. Then an additional TestEqn.H is introduced where the calculation of cells and substrate is done. Note that at this stage the calculated values are not reflecting the acctual values. This is due to the way the function is updated every timestep. Further, the outputfile no just shows the last calculated value which needs some more modifications.
 
+### Fifth example
+Introducing a new class called "biocell" which is based on the particle class and which should work together with the new application which is called "biocellFoam". To simulate the location of particles after every timestep.
+
+
 ### Fith example
 This example is based on this [PDF from the "OpenFOAM 3 Weeks" series](http://www.tfd.chalmers.se/~hani/kurser/OS_CFD_2020/lectureNotes/14_implementSolidParticlesInVOF.pdf). It is a great example on how to deal with the modification of existing code and points at the essential steps that are needed to modifiy the final results. Further, this example introduces particles which are a step closer to the final goal.
 
