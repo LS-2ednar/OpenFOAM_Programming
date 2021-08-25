@@ -1,0 +1,6 @@
+rm -r 0.*
+rm -r VTK
+rm -r *.xlsx
+rm -r log.*
+rm -r *.log
+

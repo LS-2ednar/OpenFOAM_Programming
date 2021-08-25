@@ -1,5 +1,5 @@
-$(OBJECTS_DIR)/biocellFoam.C.dep: \
-biocellFoam.C \
+$(OBJECTS_DIR)/particleLifeline.C.dep: \
+particleLifeline.C \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/fvCFD.H \
 $(WM_PROJECT_DIR)/src/dynamicFvMesh/lnInclude/dynamicFvMesh.H \
 $(WM_PROJECT_DIR)/src/transportModels/lnInclude/singlePhaseTransportModel.H \

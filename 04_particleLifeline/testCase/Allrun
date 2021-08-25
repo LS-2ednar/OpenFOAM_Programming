@@ -8,4 +8,4 @@ m4 < system/blockMeshDict.m4 > system/blockMeshDict
 
 runApplication blockMesh
 
-biocellFoam
+particleLifeline 2>&1 | tee particleLifeline.log

@@ -1,3 +1,0 @@
-biocellFoam.C
-
-EXE = $(FOAM_APPBIN)/biocellFoam
