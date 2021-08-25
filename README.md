@@ -45,4 +45,6 @@ This Repo is based on the ideas shown here [UnnamedMoose BasicOpenFOAMProgrammin
 
 ---
 ### TO DO
-Look into [OpenFOAM 3 Weeks series](https://wiki.openfoam.com/index.php?title=%223_weeks%22_series#) especially days 12 to 14!!!
+Try to fuse some of the particletracking methods (particleFoam, MPPICFoam) with the particleTracks method to get a vtk file and link the function with the pythonscript provided in case 04
+
+It seems that the Tracking of particles is harder in OpenFOAM v8 but as of july 2021 OpenFOAM v9 seems the show improvement in several quite important locations. [Link](https://openfoam.org/version/9/)
