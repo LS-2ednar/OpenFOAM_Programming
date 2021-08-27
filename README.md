@@ -35,8 +35,10 @@ The Cell Growth is determined prior to an the calculation of of the flowfield (u
 Here the pimple algorithm is modified to work with specific values which are added to an "cellProperties" dictionary and calculate the value of cells and substrate after every iteration. To archive this the pimpleFoam solver application is copyied then the .C file is renamed and adjusted in the Make/files file. Then an additional TestEqn.H is introduced where the calculation of cells and substrate is done. Note that at this stage the calculated values are not reflecting the acctual values. This is due to the way the function is updated every timestep. Further, the outputfile no just shows the last calculated value which needs some more modifications.
 
 ### Fifth example
-Here the "particleFoam" solver is used to first simulate the different particles in a given test case. Then an additional step is taken and the postprocessing technique "particleTracks" which needs an additional constant/particleTrackProperties file are used to generate a VTK file. Then a python script was introduced which allows the reorganization of the vtk file in a way, that the individual particle tracks are saved at the same spot. The file is not jet optimized and further testing needs to be done with it.
+Here the "particleFoam" solver is used to first simulate the different particles in a given test case. Then an additional step is taken and the postprocessing technique "particleTracks" which needs an additional constant/particleTrackProperties file are used to generate a VTK file.
 
+### Sixth example
+Here the DPMFoam solver was used and then the particleTracks method was applied. Then a python script was introduced which allows the reorganization of the vtk file in a way, that the individual particle tracks are saved at the same spot. The file is not jet optimized and further testing needs to be done with it.
 
 ***
 ***
