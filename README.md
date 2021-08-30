@@ -38,7 +38,8 @@ Here the pimple algorithm is modified to work with specific values which are add
 Here the "particleFoam" solver is used to first simulate the different particles in a given test case. Then an additional step is taken and the postprocessing technique "particleTracks" which needs an additional constant/particleTrackProperties file are used to generate a VTK file.
 
 ### Sixth example
-Here the DPMFoam solver was used and then the particleTracks method was applied. Then a python script was introduced which allows the reorganization of the vtk file in a way, that the individual particle tracks are saved at the same spot. ![An ExamplePlot](https://github.com/LS-2ednar/OpenFOAM_Programming/blob/main/05_DPMFoam_ParticleTrack/ExamplePlot.png)
+Here the DPMFoam solver was used and then the particleTracks method was applied. Then a python script was introduced which allows the reorganization of the vtk file in a way, that the individual particle tracks are saved at the same spot.
+<p align="center"> <img src="https://github.com/LS-2ednar/OpenFOAM_Programming/blob/main/05_DPMFoam_ParticleTrack/ExamplePlot.png" width=300 align=center> </p>
 
 ### Seventh example
 This case will combine the MPPIC solver with the "particleTracks" utility to save the ParticleTracks in runtime and therefore have more tracking points. After inspecting the source code it is clear, that the MPPICFoam is based on the code of the the DPMFoam however in the MPPICFoam code another cloud headerfile is used "basicKinematicMPPICCloud.H" which means that the DPMFoam is the code that needs to be modified.
