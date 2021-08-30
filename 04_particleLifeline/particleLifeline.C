@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
         Info<< "Time = " << runTime.timeName() << nl << endl;
 
         Info<< "\nStoring Cloudpositions:\n " <<endl;
-	Info << kinematicCloud.storeGlobalPositions(); << endl; //not sure if this works but we shell see
+	kinematicCloud.storeGlobalPositions();
 
         mesh.update();
 
@@ -92,7 +92,8 @@ int main(int argc, char *argv[])
 
     Info<< "End\n" << endl;
     
-    Info<< "For individual Particle Tracking run particleTracks floowed by VTK_to_IndividualParticles.py"<<endl;
+    Info<< "Next running particleTracks to find all individual particletracks"<< endl;
+    // particleTracks code to update everything
     return 0;
 }
 

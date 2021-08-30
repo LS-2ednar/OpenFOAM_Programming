@@ -31,7 +31,7 @@ The second example (**01_monod_save_data**) shows how data is accessed from dict
 ### Third example
 The Cell Growth is determined prior to an the calculation of of the flowfield (using simpleFoam) followed by the custom function also the concept of a substrate is introduced and an changing value for the specific growthrate is implemented. 
 
-### Forth example (still some issues which need to be faced)
+### Forth example 
 Here the pimple algorithm is modified to work with specific values which are added to an "cellProperties" dictionary and calculate the value of cells and substrate after every iteration. To archive this the pimpleFoam solver application is copyied then the .C file is renamed and adjusted in the Make/files file. Then an additional TestEqn.H is introduced where the calculation of cells and substrate is done. Note that at this stage the calculated values are not reflecting the acctual values. This is due to the way the function is updated every timestep. Further, the outputfile no just shows the last calculated value which needs some more modifications.
 
 ### Fifth example
@@ -41,8 +41,8 @@ Here the "particleFoam" solver is used to first simulate the different particles
 Here the DPMFoam solver was used and then the particleTracks method was applied. Then a python script was introduced which allows the reorganization of the vtk file in a way, that the individual particle tracks are saved at the same spot.
 <p align="center"> <img src="https://github.com/LS-2ednar/OpenFOAM_Programming/blob/main/05_DPMFoam_ParticleTrack/ExamplePlot.png" width=300 align=center> </p>
 
-### Seventh example
-This case will combine the MPPIC solver with the "particleTracks" utility to save the ParticleTracks in runtime and therefore have more tracking points. After inspecting the source code it is clear, that the MPPICFoam is based on the code of the the DPMFoam however in the MPPICFoam code another cloud headerfile is used "basicKinematicMPPICCloud.H" which means that the DPMFoam is the code that needs to be modified.
+### Seventh example (Not jet workign)
+This case will combine the MPPIC solver with the "particleTracks" utility to save the ParticleTracks in runtime and therefore have more tracking points. After inspecting the source code it is clear, that the MPPICFoam is based on the code of the the DPMFoam however in the MPPICFoam code another cloud headerfile is used "basicKinematicMPPICCloud.H" which means that the DPMFoam is the code that needs to be modified. To trick "wmake" the "DPMFoam.C" is directly modified and used for hte new solver Code to include other dependent files later in the code which are linked with a OpenFOAM specific function. Therfore only in the Make/files file the resulting appications name is changed but the sourceFile is still DPMFoam.C.
 
 
 
