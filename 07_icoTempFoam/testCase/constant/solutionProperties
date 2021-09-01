@@ -1,0 +1,44 @@
+sugar
+{
+    diffusionModel constant;
+    D            D [0 2 -1 0 0 0 0] 5.2e-10;
+}
+
+ethanol
+{
+    diffusionModel constant;
+    D            D [0 2 -1 0 0 0 0] 1.6e-9;
+}
+
+N2
+{
+    diffusionModel constant;
+    D            D [0 2 -1 0 0 0 0] 3.6e-9;
+}
+
+ 
+Foam::solute::solute
+(
+    const dictionary& soluteDict,
+    const fvMesh& mesh
+)
+:
+    volScalarField
+    (
+        IOobject
+        (
+            "C_" + soluteDict.dictName(),
+            mesh.time().timeName(),
+            mesh,
+            IOobject::MUST_READ,
+            IOobject::AUTO_WRITE
+        ),
+        mesh
+    ),
+    name_("C_" + soluteDict.dictName()),
+    soluteDict_(soluteDict),
+    D_(soluteDict_.lookup("D")),
+    diffusionModel_(soluteDict_.lookup("diffusionModel"))
+{
+    Info<< "Reading field " << name_ <<"\n" << endl;
+}

@@ -1,0 +1,2 @@
+blockMesh 2>&1 | tee blockMesh.log
+icoTempFoam 2>&1 | tee icoTempFoam.log

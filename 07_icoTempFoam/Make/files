@@ -1,0 +1,3 @@
+icoTempFoam.C
+
+EXE = $(FOAM_APPBIN)/icoTempFoam
