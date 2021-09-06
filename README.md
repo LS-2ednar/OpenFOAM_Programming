@@ -48,7 +48,11 @@ This case will combine the MPPIC solver with the "particleTracks" utility to sav
 This approach modifies the icoFoam solver. First the application code is copied, then the createFields.H and icoTempFoam.C are modified. Then in the createFields.H file the DT dimensionedScalar is introduced and a Temperaturefield is added to the file. In the icoTempFoam.C file a new equation is added and solved before runTime.write()-ing it. These given parameters need new conditions for the initial parameters in 0/ therfore T is introduced there and in the constant/transportPropteries DT is added. Finaly the fvSchemes and fvSolution files in the systems directory need to be updated for the divSchemes and laplacianSchemes. And the solver for T needs to be added. 
 
 ### Nineth example
-Adding functionality to acces the total volume of the internalMesh and saveing it to a file. This example originates from the .... solver.
+Adding functionality to acces the total volume of the internalMesh and saveing it to a file. This example originates from the icoFoam solver.
+
+### Tenth example
+Here a python script is developed to distribute particles for manual injection randomly.
+
 
 ***
 ***
