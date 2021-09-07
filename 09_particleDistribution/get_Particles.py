@@ -43,7 +43,7 @@ def list2intList(a_list):
         r_list.append(int(element))
     return r_list
 
-def particle_generation(filename,ps = False):
+def get_particle_positions(filename,ps = False):
     """
     Function generates list of Particles given a vtk datafile. Using the Keyword
     Argument ps it is posible to get the particle space.
@@ -112,16 +112,19 @@ if __name__ == '__main__':
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
     os.chdir(dname)
-    
-    a,b = particle_generation('VTK/particleTracks.vtk',ps = True)
+    try: #to read the VTK/particleTracks.vtk file otherwise generate & read it
+        particles,particle_space = get_particle_positions('VTK/particleTracks.vtk',ps = True)
+    except:
+        os.system('particleTracks')
+        particles,particle_space = get_particle_positions('VTK/particleTracks.vtk',ps = True)
     
     with open('particle.data', 'wb') as filehandle:
         # store the data as binary data stream
-        pickle.dump([a,b], filehandle)
+        pickle.dump([particles,particle_space], filehandle)
         
     
     # to work with this data you will need to do this in other code
     # import ParticleClass
     # with open('particle.data', 'rb') as filehandle:
     #     # read the data from binary data stream
-    #     a,b = pickle.load(filehandle)
+    #     particles,particle_space = pickle.load(filehandle)
