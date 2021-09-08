@@ -1,0 +1,23 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  8
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       vectorField;
+    location    "0.22/lagrangian/kinematicCloud";
+    object      angularMomentum;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+10
+(Q€Òe»F·KÃtC»ÏÂÃÕÖ½"Ñ™ì–R;FR#ğÊíI»®˜±-q¾<R¬(#V;.Fu2‹A;öÆ’£A>îÿ6³æÊr;÷Ç5óÓ0d»¼ÇØ…>zŒÑÃ{X».Õ¹K»œö‘/%¾¦5”¡ªn;zE˜NË>h;:6LëÊ>¶ìÒÑM];ÖÉcÓW;ü²(¾rB¾»åOÔU»»‡bõÖH»øóPy­/>îYxÿ&»
+E´c;¢nº£È;¾Xğ•Äıu;ªM•°‰;‚;[“®ó=)
+
+// ************************************************************************* //

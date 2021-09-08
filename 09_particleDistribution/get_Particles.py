@@ -2,7 +2,7 @@
 Particle Object to store a Particles travelroute and its age
 """
 import pickle
-
+import numpy as np
 class Particle:
     """
     Position descibed by x, y, z
@@ -15,6 +15,8 @@ class Particle:
         self.y = y
         self.z = z
         self.age = 0
+        self.value_history = []
+        self.state_transistion = None
         
     def __str__(self):
         if self.name != None:
