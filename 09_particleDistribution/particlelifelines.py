@@ -75,34 +75,6 @@ def read_particledata(particledata):
             particles,particle_space = pickle.load(filehandle)
             filehandle.close()
             return particles, particle_space
-        
-"""def map_particles_to_cells(particle_list,cell_list):
-    """
-    Mapping the particle locations to the nearest cell location for further 
-    determination of lifelines.
-    """
-    #get new lists from list of cell locations
-    x_list, y_list, z_list, new_particles = [], [], [], []
-    
-    for cell in cell_list:
-        x_list.append(cell[0])
-        y_list.append(cell[1])
-        z_list.append(cell[2])
-        
-    #define a function to search the nearset value in a list by determing the 
-    #smallest absolute difference between a given value and values in a list
-    absolute_difference = lambda list_value : abs(list_value - particle_value)
-    
-    for particle in particle_list:
-        for i in range(len(particle.x)):
-            particle_value = particle.x[i]
-            particle.x[i] = min(x_list,key=absolute_difference)
-            particle_value = particle.y[i]
-            particle.y[i] = min(y_list,key=absolute_difference)
-            particle_value = particle.z[i]
-            particle.z[i] = min(z_list,key=absolute_difference)
-        new_particles.append(particle)
-    return new_particles"""
 
 def particle_lifelines(particle_list,cell_list,zones,num_zones):
     
@@ -154,9 +126,39 @@ def particle_state_transions(list_of_particles,num_states):
         particle.state_transions = out
     return list_of_particles
 
+def system_state_transion(list_of_particles, Number_of_states):
+    
+    P = np.zeros((Number_of_states,Number_of_states)) 
+    for particle in list_of_particles:
+        P+=particle.state_transions
+        
+    for i in range(Number_of_states):
+        if sum(P[i]) != 0:
+            P[i] = P[i]/sum(P[i])
+    
+    return P
 
+def long_term_steady_state(P):
+    """
+    Assuming Av=b where v is the steady-state-transion probability
+    A is equal to the transposed state transion probability matrix with an added line to describe
+    the n values where n is representing the number of states
+    b is equal to a column vector of shape n+1 where all values are 0 but the last one which is equal to 1
+    """
+    
+    A = np.append(np.transpose(P)-np.identity(len(P)),[[1,1,1]],axis=0)
+    b = np.transpose(np.array([[0,0,0,1]]))
+    
+    v = np.linalg.solve(np.transpose(A).dot(A),np.transpose(A).dot(b))
+    
+    for state in range(len(P)):
+        print(f'State {state}: {v[state]}')
+    
+    return v
+                  
 if __name__ == '__main__':
     
+
     print('Running Script')
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
@@ -165,34 +167,24 @@ if __name__ == '__main__':
     print('\nReading files for zones, coordinates and particles')
     number_of_zones = num_zones('dangerzones')
     zones = read_zones('dangerzones')
-    coordinates = read_locations('C')
+    coordinates = read_locations('0/C')
     particles, particle_space = read_particledata('particle.data')
     
     print('\nMapping particles to nearest cell center location')
     #new_particles = map_particles_to_cells(particles,coordinates)
     new_particles = particles
     print('\nDetermine the lifelines of the particles')
-    end_particltes = particle_lifelines(new_particles,coordinates,zones,number_of_zones)
-    end_particltes = particle_state_transions(end_particltes,number_of_zones)
-    state_trans = np.zeros((3,3))
-    for particle in end_particltes:
-        state_trans+=particle.state_transions
-        
-    if sum(state_trans[0]) != 0:
-        state_trans[0] = state_trans[0]/sum(state_trans[0])
-    if sum(state_trans[1]) != 0:
-        state_trans[1] = state_trans[1]/sum(state_trans[1])
-    if sum(state_trans[2]) != 0:
-        state_trans[2] = state_trans[2]/sum(state_trans[2])
+    end_particles = particle_lifelines(new_particles,coordinates,zones,number_of_zones)
+    end_particles = particle_state_transions(end_particles,number_of_zones)
     
-    print('\nThe State transion matrix for this problem looks as follows:')
-    print(state_trans)
     
-    print('Where the long-term steady-state-solution vector is:')
-    print()
+    P = system_state_transion(end_particles,3)
+    print(f'\nThe State transion matrix for this problem looks as follows:\n{P}')
     
-"""
-ToDO:
------
-Check lines 79 to 105 as they might be redundant!
-"""  
+    
+    print('\n\nWhere the long-term steady-state-solution vector is:\n')
+    steady_state = long_term_steady_state(P)
+    
+### To Do
+### Modify the output in lines 79 to 102 --> progressbar or something
+###
