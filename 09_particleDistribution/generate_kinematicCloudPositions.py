@@ -1,20 +1,41 @@
 """
-Generating Randomly placed particles in a OpenFOAM 
+Generate a kinematicCloud File to work with openFoam this
 """
-import numpy as np
+import os
 
-def generate_file(x, y, z, numPoints=100):
-    print('Genearing KinematicCloudPosition file')
-    def random_position():
-        x_min, x_max, y_min, y_max, z_min,z_max = min(x), max(x), min(y), max(y), min(z), max(z)
-        
-        ret_arg = ''
-        for i in range(numPoints):
-            Px, Py, Pz = round(np.random.uniform(x_min,x_max),4), round(np.random.uniform(y_min,y_max),4), round(np.random.uniform(z_min,z_max),4)
-            ret_arg += f'({Px} {Py} {Pz})\n'
-        
-        return ret_arg
+def get_internalmesh():
     
+    #try to read the C file in 0
+    if os.path.isfile('0\C'):
+        with open('0\C','r') as cFile:
+            intMesh = cFile.read().split('\n')
+            elements = 22+int(intMesh[20])
+            cFile.close()
+    
+    else:
+        print('No C file found trying to create it')
+        try:
+            os.system('postProcess -func writeCellCentres -latestTime')
+            with open('0\C','r') as cFile:
+                intMesh = cFile.read().split('\n')
+                elements = 22+int(intMesh[20])
+                cFile.close()
+        except:
+            return 'something went wrong'
+        
+    
+    return intMesh[22:elements]
+
+
+def set_particles(number_of_particles,internalMesh):
+    
+    
+    
+    #calculations for startposition seleciton
+    pos_postions = len(internalMesh)
+    step_difference = pos_postions // number_of_particles
+    
+    #setup for the file to be written
     head = """/*--------------------------------*- C++ -*----------------------------------*\\
  =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
@@ -34,24 +55,23 @@ FoamFile
 (
 """
     bottom = ')\n\n// ************************************************************************* //'
-    print(head+random_position()+')\n\n// ************************************************************************* //')
-    # output = head+random_position()+')\n'+'\n// ************************************************************************* //'
-
+    
+    #writing the file 
     with open('kinematicCloudPositions','w') as file:
         file.write(head)
-        file.write(random_position())
+        index = 0
+        for i in range(number_of_particles):
+            file.write(internalMesh[index]+'\n')
+            index += step_difference
         file.write(bottom)
-        file.close()
-    print('Done!')
     return 
 
-def get_solutuin_space(filename):
-    
-    x,y,z = 0,0,0
-    
-    return x,y,z
-
-
 if __name__ == '__main__':
-    print(1)
+    #set current working directory to file location
+    abspath = os.path.abspath(__file__)
+    dname = os.path.dirname(abspath)
+    os.chdir(dname)
+    
+    #set a number of particles in the internal mesh at the cell centers given.
+    set_particles(200,get_internalmesh())
     

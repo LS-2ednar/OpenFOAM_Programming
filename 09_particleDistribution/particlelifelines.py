@@ -32,7 +32,7 @@ def num_zones(dangerzones_file):
 
 def read_zones(path):
     """
-    Read coordinates of cells form a file
+    Read information about cells form a file
     """
     values = []
     with open(path,'r') as file:
@@ -50,7 +50,7 @@ def read_zones(path):
     return values
 def read_locations(path):
     """
-    Read coordinates of cells form a file
+    Read coordinates of cell centres form a file
     """
     locations = []
     with open(path,'r') as file:
@@ -76,7 +76,7 @@ def read_particledata(particledata):
             filehandle.close()
             return particles, particle_space
         
-def map_particles_to_cells(particle_list,cell_list):
+"""def map_particles_to_cells(particle_list,cell_list):
     """
     Mapping the particle locations to the nearest cell location for further 
     determination of lifelines.
@@ -102,7 +102,7 @@ def map_particles_to_cells(particle_list,cell_list):
             particle_value = particle.z[i]
             particle.z[i] = min(z_list,key=absolute_difference)
         new_particles.append(particle)
-    return new_particles
+    return new_particles"""
 
 def particle_lifelines(particle_list,cell_list,zones,num_zones):
     
@@ -169,8 +169,8 @@ if __name__ == '__main__':
     particles, particle_space = read_particledata('particle.data')
     
     print('\nMapping particles to nearest cell center location')
-    new_particles = map_particles_to_cells(particles,coordinates)
-    
+    #new_particles = map_particles_to_cells(particles,coordinates)
+    new_particles = particles
     print('\nDetermine the lifelines of the particles')
     end_particltes = particle_lifelines(new_particles,coordinates,zones,number_of_zones)
     end_particltes = particle_state_transions(end_particltes,number_of_zones)

@@ -43,9 +43,9 @@ def read_volumes(path):
     """
     return read_epsilons(path)
 
-def calculate_local_kolmogorov(locations, epsilons, volumes, kinematicViscosity = 6.922e-4, unit = 'µm'): #assuming 37°C
+def calculate_local_kolmogorov(epsilons, kinematicViscosity = 6.922e-4, unit = 'µm'): #assuming 37°C
     """
-    Calculates the local energy disipation value based on the given values for pressure and volume
+    Calculates local kolmogorov length scale based on the given kinematic viscosity and energydissipationrate
     """
     kolmogorov = []
     if unit == 'µm':
@@ -53,7 +53,7 @@ def calculate_local_kolmogorov(locations, epsilons, volumes, kinematicViscosity 
     else:
         print('Kolmogorv length scale in m')
         
-    for i in range(0,len(locations)):
+    for i in range(0,len(epsilons)):
         if unit == 'µm':
             kolmogorov.append((kinematicViscosity/(epsilons[i]**3))**(1/4)*1000000)
         else:
@@ -185,14 +185,12 @@ boundaryField
 
 if __name__ == '__main__':
 
-    # print('Running Script')
+    print('Running Script')
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
     os.chdir(dname)
-    locations = read_locations('C')
     epsilons = read_epsilons('epsilon')
-    volumes = read_volumes('V')
-    kolmorov = calculate_local_kolmogorov(locations,epsilons,volumes,unit ='m') 
+    kolmorov = calculate_local_kolmogorov(epsilons) 
     write_kolmogorov(kolmorov)
     write_zones(kolmorov)
     
