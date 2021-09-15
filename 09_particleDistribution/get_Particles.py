@@ -16,7 +16,10 @@ class Particle:
         self.z = z
         self.age = 0
         self.value_history = []
+        self.value_index = []
         self.state_transistion = None
+        self.times = []
+        self.doubling = 0
         
     def __str__(self):
         if self.name != None:
@@ -103,6 +106,23 @@ def get_particle_positions(filename,ps = False):
         return particle_list, particle_space()
     else:
         return particle_list
+
+def get_numbered_directories():
+    all_dirs = next(os.walk('.'))[1]
+    num_dirs = []
+    for di in all_dirs:
+        try:
+            if '.' not in di:
+                num_dirs.append(int(di))
+            else:
+                num_dirs.append(float(di))
+        except:
+            continue
+    num_dirs.sort()
+    return num_dirs
+
+def get_latesttime():
+    return get_numbered_directories()[-1]
 
 # """
 # Run the script:

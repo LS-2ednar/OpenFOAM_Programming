@@ -3,6 +3,23 @@ Calculating local energy dissipationrate
 """
 import os
 
+def get_numbered_directories():
+    all_dirs = next(os.walk('.'))[1]
+    num_dirs = []
+    for di in all_dirs:
+        try:
+            if '.' not in di:
+                num_dirs.append(int(di))
+            else:
+                num_dirs.append(float(di))
+        except:
+            continue
+    num_dirs.sort()
+    return num_dirs
+
+def get_latesttime():
+    return get_numbered_directories()[-1]
+
 def read_locations(path):
     locations = []
     with open(path,'r') as file:
@@ -189,7 +206,7 @@ if __name__ == '__main__':
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
     os.chdir(dname)
-    epsilons = read_epsilons('epsilon')
+    epsilons = read_epsilons(f'{get_latesttime()}\\epsilon')
     kolmorov = calculate_local_kolmogorov(epsilons) 
     write_kolmogorov(kolmorov)
     write_zones(kolmorov)
