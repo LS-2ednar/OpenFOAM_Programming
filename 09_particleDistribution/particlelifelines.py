@@ -8,7 +8,10 @@ import os
 import sys
 import pickle
 from get_Particles import Particle
+import get_Particles
 import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
 
 def num_zones(dangerzones_file):
     """
@@ -196,8 +199,59 @@ def long_term_steady_state(P):
     for state in range(len(P)):
         print(f'State {state}: {v[state]}')
     
-    return v    
-             
+    return v
+
+def mc_process_plot(STPM,NumIter=50):
+    """
+    Given a STPM (state transition probability matrix), a number of cells (NumCells), 
+    and a number of iterations (NumIter) the long therm steady state is visualized
+    """
+    num_states = len(STPM)
+    lables = [f'State {i}' for i in range(num_states)]
+    
+    #state 0 is 100% of pop in the beginnnig
+    state=np.array([np.append(1,np.zeros(num_states-1))])
+    stateHist=state
+    for x in range(NumIter):
+        state=np.dot(state,STPM)
+        stateHist=np.append(stateHist,state,axis=0)
+        dfDistrHist0 = pd.DataFrame(stateHist,columns = lables)
+    dfDistrHist0.plot(ylim=(0,1),
+                      xlim=(-0.1,NumIter),
+                      ylabel = 'Distribution [-]',
+                      xlabel = 'State Changes [-]',
+                      title = 'longterm steady state\nstarting from State 0')
+    plt.show()
+    
+    #Even distribution of all states
+    state=np.array([np.ones(num_states)/num_states])
+    stateHist=state
+    for x in range(NumIter):
+        state=np.dot(state,STPM)
+        stateHist=np.append(stateHist,state,axis=0)
+        dfDistrHist1 = pd.DataFrame(stateHist,columns = lables)
+    dfDistrHist1.plot(ylim=(0,1),
+                      xlim=(-0.1,NumIter),
+                      ylabel = 'Distribution [-]',
+                      xlabel = 'State Changes [-]',
+                      title = 'longterm steady state\nstarting from even distribution')
+    plt.show()
+    
+    #state n is 100% of pop in the beginnnig
+    state=np.array([np.append(np.zeros(num_states-1),1)])
+    stateHist=state
+    for x in range(NumIter):
+        state=np.dot(state,STPM)
+        stateHist=np.append(stateHist,state,axis=0)
+        dfDistrHist2 = pd.DataFrame(stateHist,columns = lables)
+    dfDistrHist2.plot(ylim=(0,1),
+                      xlim=(-0.1,NumIter),
+                      ylabel = 'Distribution [-]',
+                      xlabel = 'State Changes [-]',
+                      title = f'longterm steady state\nstarting from State {num_states-1}')
+    plt.show()
+    return dfDistrHist1
+          
 if __name__ == '__main__':
     
     print('Running Script')
@@ -208,22 +262,22 @@ if __name__ == '__main__':
     print('\nReading files for zones, coordinates and particles')
     number_of_zones = num_zones('dangerzones')
     zones = read_zones('dangerzones')
-    coordinates = read_locations('0/C')
+    coordinates = read_locations(f'{get_Particles.get_latesttime()}/C')
     particles, particle_space = read_particledata('particle.data')
     
-    print('\nDetermine the lifelines of the particles\n')
+    print('\nDetermine lifelines of particles\n')
     end_particles = particle_lifelines(particles,coordinates,zones,number_of_zones)
     end_particles = particle_state_transions(end_particles,number_of_zones)
     
     
     P = system_state_transion(end_particles,3)
-    print(f'\n\nThe State transion matrix for this problem looks as follows:\n\n{P}')
+    print(f'\n\nThe State transion matrix for this system looks as follows:\n\n{P}')
     
     
     print('\n\nWhere the long-term steady-state-solution vector is:\n')
     steady_state = long_term_steady_state(P)
+    dist = mc_process_plot(P)
     
-
 ### To Do
-### Modify the output in lines 79 to 102 --> progressbar or something
+### Add the final values of the state distributions to the plots
 ###

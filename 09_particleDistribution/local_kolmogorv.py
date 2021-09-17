@@ -136,8 +136,13 @@ boundaryField
         file.close()
     return
 
-def write_zones(list_of_data):
-    max_ = max(list_of_data)
+def write_zones(list_of_data, cell_diameter=1.5e-5):
+    """
+    The higher the zone number more critical is the situatlion for the cells
+    0 is equal to 110% of the cells diameter and should not affect the cells
+    1 is equal to 105% of the cells diameter and might affect them
+    2 is equal to less then 105% of the cells diameter effects are certain
+    """
     head="""/*--------------------------------*- C++ -*----------------------------------*\\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
@@ -190,12 +195,12 @@ boundaryField
         file.write(head)
         file.write(middle)
         for element in list_of_data:
-            if element >= 0.4*max_:
-                file.write(str(3)+'\n')
-            elif element > 0.05*max_ and element < 0.4*max_:
-                file.write(str(2)+'\n')
-            else:
+            if element >= cell_diameter*1.1:                                    #if modifications are needed ajust here 
                 file.write(str(1)+'\n')
+            elif element > cell_diameter*1.05 and element < cell_diameter*1.1:  #if modifications are needed ajust here
+                file.write(str(1)+'\n')
+            else:
+                file.write(str(2)+'\n')
         file.write(tail)
         file.close()
     return
@@ -203,11 +208,16 @@ boundaryField
 if __name__ == '__main__':
 
     print('Running Script')
+    #select current working directory
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
     os.chdir(dname)
+    #get_data_from latest time_point
     epsilons = read_epsilons(f'{get_latesttime()}\\epsilon')
-    kolmorov = calculate_local_kolmogorov(epsilons) 
+    #calculate kolmogorow values
+    kolmorov = calculate_local_kolmogorov(epsilons,unit = 'm')
+    print('\nWriting local_kolmogorov_lengthscale file')
     write_kolmogorov(kolmorov)
+    print('\nWriting dangerzones file')
     write_zones(kolmorov)
     
