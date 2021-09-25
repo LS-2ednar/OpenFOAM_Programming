@@ -29,8 +29,7 @@ boundaryField
 
     TOP
     {
-        type            nutkWallFunction;
-        value           uniform 0;
+        type            symmetry;
     }
 
     BOTTOM

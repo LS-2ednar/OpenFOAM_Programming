@@ -19,11 +19,11 @@ solvers
 {
     p
     {
-        solver          GAMG;
+        solver          smoothSolver; 
         tolerance       1e-08;
         relTol          0.05;
         smoother        GaussSeidel;
-        nCellsInCoarsestLevel 20;
+        nSweeps         3;
     }
 
     U
@@ -65,13 +65,13 @@ relaxationFactors
 {
     fields
     {
-        p               0.3; // war 0.15
+        p               0.15; // war 0.3 
     }
     equations
     {
-        U               0.7; // war 0.3
-        k               0.7; // war 0.3
-        epsilon         0.7; // war 0.3
+        U               0.25;
+        k               0.25;
+        epsilon         0.25;
     }
 }
 
