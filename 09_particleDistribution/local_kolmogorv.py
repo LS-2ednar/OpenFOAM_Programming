@@ -39,7 +39,7 @@ def read_locations(path):
     return locations
 
 def read_epsilons(path):
-    pressures = []
+    epsilons = []
     with open(path,'r') as file:
         
         # readfile
@@ -50,15 +50,55 @@ def read_epsilons(path):
         loop = int(b[20])+22
         
         for i in range(22,loop):
-            pressures.append(float(b[i]))
+            epsilons.append(float(b[i]))
                  
-    return pressures
+    return epsilons
 
 def read_volumes(path):
     """
     Works identical tehn read_pressures. Difference is output list is a list of folats
     """
     return read_epsilons(path)
+
+def read_tail(File):
+    """
+    Gets tail of a file
+    """
+    
+    #initialize a counter and tail of a document
+    c, tail = 0, ')\n;\n\n'
+    
+    #try to read the file in windows way
+    try:
+        with open(f'0\\{File}','r') as f:
+            for line in f:
+                c += 1
+                if c > 21:
+                    if 'value' in line:
+                        continue
+                    elif 'symmetry' in line:
+                        tail += '        type symmetry;\n'
+                        
+                    elif 'type' in line:
+                        tail += '        type zeroGradient;\n'
+                    else:
+                        tail += line
+    except:
+        with open(f'0/{File}','r') as f:
+            for line in f:
+                c += 1
+                if c > 21:
+                    if 'value' in line:
+                        continue
+                    elif 'symmetry' in line:
+                        tail += '        type symmetry;\n'
+                        
+                    elif 'type' in line:
+                        tail += '        type zeroGradient;\n'
+                    else:
+                        tail += line
+    
+    return tail
 
 def calculate_local_kolmogorov(epsilons, kinematicViscosity = 6.922e-4, unit = 'µm'): #assuming 37°C
     """
@@ -78,7 +118,7 @@ def calculate_local_kolmogorov(epsilons, kinematicViscosity = 6.922e-4, unit = '
         
     return kolmogorov
 
-def write_kolmogorov(list_of_data):
+def write_kolmogorov(list_of_data,tail):
     head="""/*--------------------------------*- C++ -*----------------------------------*\\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
@@ -102,41 +142,25 @@ internalField   nonuniform List<scalar>"""
     middle = f"""\n{len(list_of_data)}
 (
 """
-    tail =""")
-;
-
-boundaryField
-{
-    rotor
-    {
-        type            zeroGradient;
-    }
-    stator
-    {
-        type            zeroGradient;
-    }
-    front
-    {
-        type            empty;
-    }
-    back
-    {
-        type            empty;
-    }
-}
-
-
-// ************************************************************************* //"""
-    with open('kolmogorov','w') as file:
-        file.write(head)
-        file.write(middle)
-        for element in list_of_data:
-            file.write(str(element)+'\n')
-        file.write(tail)
-        file.close()
+    try:
+        with open(f'{get_latesttime()}/kolmogorov','w') as file:
+            file.write(head)
+            file.write(middle)
+            for element in list_of_data:
+                file.write(str(element)+'\n')
+            file.write(tail)
+            file.close()
+    except:
+        with open(f'{get_latesttime()}\\kolmogorov','w') as file:
+            file.write(head)
+            file.write(middle)
+            for element in list_of_data:
+                file.write(str(element)+'\n')
+            file.write(tail)
+            file.close()       
     return
 
-def write_zones(list_of_data, cell_diameter=1.5e-5):
+def write_zones(list_of_data, tail, cell_diameter=1.5e-5):
     """
     The higher the zone number more critical is the situatlion for the cells
     0 is equal to 110% of the cells diameter and should not affect the cells
@@ -166,43 +190,32 @@ internalField   nonuniform List<scalar>"""
     middle = f"""\n{len(list_of_data)}
 (
 """
-    tail =""")
-;
-
-boundaryField
-{
-    rotor
-    {
-        type            zeroGradient;
-    }
-    stator
-    {
-        type            zeroGradient;
-    }
-    front
-    {
-        type            empty;
-    }
-    back
-    {
-        type            empty;
-    }
-}
-
-
-// ************************************************************************* //"""
-    with open('dangerzones','w') as file:
-        file.write(head)
-        file.write(middle)
-        for element in list_of_data:
-            if element >= cell_diameter*1.1:                                    #if modifications are needed ajust here 
-                file.write(str(1)+'\n')
-            elif element > cell_diameter*1.05 and element < cell_diameter*1.1:  #if modifications are needed ajust here
-                file.write(str(1)+'\n')
-            else:
-                file.write(str(2)+'\n')
-        file.write(tail)
-        file.close()
+    try:
+        with open(f'{get_latesttime()}/dangerzones','w') as file:
+            file.write(head)
+            file.write(middle)
+            for element in list_of_data:
+                if element >= cell_diameter*1.1:                                    #if modifications are needed ajust here 
+                    file.write(str(1)+'\n')
+                elif element > cell_diameter*1.05 and element < cell_diameter*1.1:  #if modifications are needed ajust here
+                    file.write(str(2)+'\n')
+                else:
+                    file.write(str(3)+'\n')
+            file.write(tail)
+            file.close()
+    except:
+        with open(f'{get_latesttime()}\\dangerzones','w') as file:
+            file.write(head)
+            file.write(middle)
+            for element in list_of_data:
+                if element >= cell_diameter*1.1:                                    #if modifications are needed ajust here 
+                    file.write(str(1)+'\n')
+                elif element > cell_diameter*1.05 and element < cell_diameter*1.1:  #if modifications are needed ajust here
+                    file.write(str(2)+'\n')
+                else:
+                    file.write(str(3)+'\n')
+            file.write(tail)
+            file.close()
     return
 
 if __name__ == '__main__':
@@ -212,12 +225,17 @@ if __name__ == '__main__':
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
     os.chdir(dname)
-    #get_data_from latest time_point
-    epsilons = read_epsilons(f'{get_latesttime()}\\epsilon')
+    #get tail of a document
+    tail = read_tail('epsilon')
+    #get data from latest time point
+    try:
+        epsilons = read_epsilons(f'{get_latesttime()}\\epsilon')
+    except:
+        epsilons = read_epsilons(f'{get_latesttime()}/epsilon')
     #calculate kolmogorow values
-    kolmorov = calculate_local_kolmogorov(epsilons,unit = 'm')
+    kolmorov = calculate_local_kolmogorov(epsilons, unit = 'm')
     print('\nWriting local_kolmogorov_lengthscale file')
-    write_kolmogorov(kolmorov)
+    write_kolmogorov(kolmorov, tail)
     print('\nWriting dangerzones file')
-    write_zones(kolmorov)
+    write_zones(kolmorov, tail)
     
