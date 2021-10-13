@@ -4,6 +4,7 @@ Calculating local energy dissipationrate
 import os
 import pandas as pd
 import numpy as np
+import sys
 
 def get_numbered_directories():
     """
@@ -167,10 +168,10 @@ def calculate_stresses():
     
     #generate needed data
     try:
-        # os.system('postProcess -func time')
-        # os.system('postProcess -func writeCellVolumes')
-        # os.system('simpleFoam -postProcess -func "grad(U)" -field U')
-        print('run some code')
+        os.system('postProcess -func time')
+        os.system('postProcess -func writeCellVolumes')
+        os.system('simpleFoam -postProcess -func "grad(U)" -field U')
+        print()
     except:
         print('Something went worng')
         
@@ -183,6 +184,9 @@ def calculate_stresses():
     grad['normal'] = np.nan
     grad['shear'] = np.nan
     
+    #for progressbar
+    c, pb = 0,0
+    print('\nCalculating Normal- and Shearforces:')
     for i in range(len(U)):
         
         #determine normal stress
@@ -245,6 +249,16 @@ def calculate_stresses():
         TermS1 = (dusdys1 + dusdys2 + dusdys3 + dvsdxs1 + dvsdxs2 + dvsdxs3)**2
         TermS2 = (dusdzs1 + dusdzs2 + dusdzs3 + dwsdxs1g + dwsdxs2g + dwsdxs3g)**2
         grad['shear'][i]=(TermS1 + TermS2)**(1/2)
+        
+        c+= 1
+        
+        if c == len(U)//100:
+                pb += 1
+                sys.stdout.write('\r')
+                sys.stdout.write("[%-100s] %d%%" % ('='*pb, pb))
+                sys.stdout.flush()
+                c = 0
+                
     # print(grad.head(5))
     # print(U)
     # print(gradU)
@@ -687,7 +701,7 @@ if __name__ == '__main__':
     
     #calculating normal- and shearstress
     normal, shear = calculate_stresses()
-    print('\nWriting local normalstress')
+    print('\n\nWriting local normalstress')
     write_normalstress(normal,tail)
     print('\nWriting local shearstress')
     write_shearstress(shear,tail)
@@ -697,8 +711,3 @@ if __name__ == '__main__':
     write_all_zones(kolmogorov,normal,shear,tail)
     # write_zones(kolmorov, tail)
     
-"""
-To DO:
-    - updating normal and shearstress function to display progressbar otherwise no clue where we are...
-    - updating dangerzones function
-"""
