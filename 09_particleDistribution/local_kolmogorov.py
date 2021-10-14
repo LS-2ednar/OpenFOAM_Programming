@@ -5,6 +5,7 @@ import os
 import pandas as pd
 import numpy as np
 import sys
+import matplotlib.pyplot as plt
 
 def get_numbered_directories():
     """
@@ -620,69 +621,39 @@ internalField   nonuniform List<scalar>"""
     
     return
 
+def overview_plot(kolmogorov, normal, shear):
+    
+    fig, ax0 = plt.subplots(figsize = (7,7))
+    #first axis
+    l1 = ax0.plot(sorted(normal),'-k',label='Normalstress')
+    l2 = ax0.plot(sorted(shear),'--k',label='Shearstress')
+    
+    ax1 = ax0.twinx()
+    #second axis
+    l3 = ax1.plot(sorted(np.array(kolmogorov)*1_000_000),':k',label='Kolmogorov lengthscale')
+    
+    #set titles for axis
+    ax0.set_ylabel('Normal- and Shearstress [ kg$\cdot$m$^{-1}$$\cdot$s$^{-2}$ ]',fontsize=14)
+    ax1.set_ylabel('Kolmogorov lengthscale [ $\mu$m ]',fontsize=14)
+    ax0.set_xlabel('Sorted values',fontsize=14)
+    ax0.set_xlim(0,100000)
+    ax0.set_ylim(-20)
+    ax1.set_ylim()
+    ax0.tick_params(axis='both', which='major', labelsize=12)
+    #labels for legend
+    ls = l1+l2+l3
+    labels = [l.get_label() for l in ls]
+    ax0.legend(ls,labels,fontsize=12)
+    plt.show()
+    
+    fig.savefig('overviewplot')
+    
+    return
 
-# def write_zones(list_of_data, tail, cell_diameter=1.5e-5):
-#     """
-#     The higher the zone number more critical is the situatlion for the cells
-#     0 is equal to 110% of the cells diameter and should not affect the cells
-#     1 is equal to 105% of the cells diameter and might affect them
-#     2 is equal to less then 105% of the cells diameter effects are certain
-#     """
-#     head=f"""/*--------------------------------*- C++ -*----------------------------------*\\
-#   =========                 |
-#   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-#    \\    /   O peration     | Website:  https://openfoam.org
-#     \\  /    A nd           | Version:  8
-#      \\/     M anipulation  |
-# \*---------------------------------------------------------------------------*/
-# FoamFile
-# {{
-#     version     2.0;
-#     format      ascii;
-#     class       volScalarField;
-#     location    {get_latesttime()};
-#     object      DangerZones;
-# }}
-# // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
-# dimensions      [0 0 0 0 0 0 0];
-
-# internalField   nonuniform List<scalar>""" 
-#     middle = f"""\n{len(list_of_data)}
-# (
-# """
-#     try:
-#         with open(f'{get_latesttime()}/dangerzones','w') as file:
-#             file.write(head)
-#             file.write(middle)
-#             for element in list_of_data:
-#                 if element >= cell_diameter*1.1:                                    #if modifications are needed ajust here 
-#                     file.write(str(1)+'\n')
-#                 elif element > cell_diameter*1.05 and element < cell_diameter*1.1:  #if modifications are needed ajust here
-#                     file.write(str(2)+'\n')
-#                 else:
-#                     file.write(str(3)+'\n')
-#             file.write(tail)
-#             file.close()
-#     except:
-#         with open(f'{get_latesttime()}\\dangerzones','w') as file:
-#             file.write(head)
-#             file.write(middle)
-#             for element in list_of_data:
-#                 if element >= cell_diameter*1.1:                                    #if modifications are needed ajust here 
-#                     file.write(str(1)+'\n')
-#                 elif element > cell_diameter*1.05 and element < cell_diameter*1.1:  #if modifications are needed ajust here
-#                     file.write(str(2)+'\n')
-#                 else:
-#                     file.write(str(3)+'\n')
-#             file.write(tail)
-#             file.close()
-#     return
-
-
+#running the script
 if __name__ == '__main__':
 
-    print('Running Script')
+    print('running Script')
     #select current working directory
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
@@ -696,18 +667,23 @@ if __name__ == '__main__':
         epsilons = read_epsilons(f'{get_latesttime()}/epsilon')
     #calculate kolmogorow values
     kolmogorov = calculate_local_kolmogorov(epsilons, unit = 'm')
-    print('\nWriting local_kolmogorov_lengthscale file')
+    print('\nwriting local_kolmogorov_lengthscale file')
     write_kolmogorov(kolmogorov, tail)
     
     #calculating normal- and shearstress
     normal, shear = calculate_stresses()
-    print('\n\nWriting local normalstress')
+    print('\n\nwriting local normalstress')
     write_normalstress(normal,tail)
-    print('\nWriting local shearstress')
+    print('\nwriting local shearstress')
     write_shearstress(shear,tail)
     
     
-    print('\nWriting dangerzones files')
+    print('\nwriting dangerzones files')
     write_all_zones(kolmogorov,normal,shear,tail)
     # write_zones(kolmorov, tail)
+    
+    print('\ngenerating overview plot')
+    #ploting values on graph
+    overview_plot(kolmogorov, normal, shear)
+    
     
